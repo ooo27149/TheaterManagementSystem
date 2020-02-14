@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragments  ::  head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户注册</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../static/lib/editormd/css/editormd.min.css">
+  <link rel="stylesheet" href="../static/css/me.css">
+</head>
+<body>
+
+  <!--导航-->
+  <nav th:replace="_fragments  ::  menu(0)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item">影院后台</h2>
+        <a href="#" th:href="@{/movies}" class=" item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>正在热映</a>
+        <a href="#" th:href="@{/upcoming}" class=" item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="file video outline icon"></i>即将上映</a>
+        <a href="#" th:href="@{/tweets}" class=" item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="file alternate icon"></i>最新影讯</a>
+        <div class="right m-item m-mobile-hide menu">
+          <div class="ui dropdown  item">
+            <div class="text">
+              <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005">
+              Avan
+            </div>
+            <i class="dropdown icon"></i>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+
+  <br>
+  <br>
+
+  <!--中间内容-->
+  <div  class="m-container-tiny m-padded-tb-big" style="min-height: 50.5em !important;">
+    <div class="ui container">
+      <form enctype="multipart/form-data" method="post"  th:object="${client}"
+            th:action="@{/client_save}" class="ui form">
+
+        <div class="field">
+          <label>手机</label>
+          <input type="text" name="phone" th:value="*{phone}" placeholder="手机号码将作为登录名">
+        </div>
+        <div class="field">
+          <label>昵称</label>
+          <input type="text" name="username" th:value="*{username}" placeholder="请输入昵称">
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="text" name="email" th:value="*{email}" placeholder="请输入邮箱地址">
+        </div>
+        <div class="field">
+          <label>上传头像</label>
+          <input type="file" name="file"/>
+        </div>
+
+        <div class="field">
+          <label>密码</label>
+          <input type="password" name="password" placeholder="请设置密码">
+        </div>
+        <div class="field">
+          <input type="password" name="confirmPassword"  placeholder="确认密码">
+        </div>
+
+        <!--/*/
+             <div class="ui negative message" th:if="${#fields.hasErrors('phone')}"  >
+               <i class="close icon"></i>
+               <div class="header">验证失败</div>
+               <p th:errors="*{phone}">提交信息不符合规则</p>
+             </div>
+              /*/-->
+        <br>
+        <br>
+        <div class="ui right aligned container">
+          <button type="button" class="ui button" onclick="window.history.go(-1)" >返回</button>
+          <button class="ui teal submit button">注册</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <br>
+  <br>
+
+  <!--底部footer-->
+  <footer  th:replace="_fragments  ::  footer"class="ui inverted vertical segment m-padded-tb-massive">
+
+      <div class="ui inverted section divider"></div>
+      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2015 - 2019 / YifanCen / Powered by YifanCen in Amoy</p>
+    </div>
+
+  </footer>
+
+  <!--/*/<th:block th:replace="_fragments :: script">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <!--/*/</th:block>/*/-->
+  <script>
+
+    //初始化Markdown编辑器
+
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+      on : 'hover'
+    });
+
+    $('.ui.form').form({
+      fields : {
+        username : {
+          identifier: 'username',
+          rules: [{
+            type : 'empty',
+            prompt: 'please enter your username'
+          }]
+        }
+      }
+    });
+
+    $('.ui.form').form({
+      fields : {
+        password : {
+          identifier: 'password',
+          rules: [{
+            type : 'empty',
+            prompt: 'please enter your password'
+          }]
+        },
+        phone : {
+          identifier: 'phone',
+          rules: [{
+            type : 'empty',
+            prompt: 'please enter your phone'
+          }]
+        },
+        confirmPassword : {
+          identifier: 'confirmPassword',
+          rules: [{
+            type : 'empty',
+            prompt: 'please enter your confirm password'
+          }]
+        }
+      }
+    });
+    //消息提示关闭初始化
+    $('.message .close')
+            .on('click', function () {
+              $(this)
+                      .closest('.message')
+                      .transition('fade');
+            });
+
+  </script>
+</body>
+</html>

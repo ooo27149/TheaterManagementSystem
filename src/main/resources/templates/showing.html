@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<!--<head >-->
+<head th:replace="_fragments :: head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>正在热映</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css" >
+  <link rel="stylesheet" href="../static/css/me.css">
+</head>
+<body style="">
+
+  <!--导航-->
+  <!--<nav  class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >-->
+  <nav th:replace="_fragments :: menu(1)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item"></h2>
+        <a href="#" th:href="@{/movies}" class=" item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>正在热映</a>
+        <a href="#" th:href="@{/upcoming}" class=" item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="file video outline icon"></i>即将上映</a>
+        <a href="#" th:href="@{/tweets}" class=" item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tasks icon"></i>最新影讯</a>
+        <div class="right m-item item m-mobile-hide">
+          <div class="ui icon inverted transparent input m-margin-tb-tiny">
+            <input type="text" placeholder="Search....">
+            <i class="search link icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+
+  <!--中间内容-->
+  <div  class="m-container m-padded-tb-big m-bg2" style="min-height: 50.5em !important;">
+    <div class="ui container">
+      <div class="ui stackable grid">
+        <!--左边博客列表-->
+        <div class="fourteen wide column">
+          <!--header-->
+          <div class="ui top attached segment no-border-besides-bottom m-bg">
+            <div class="ui middle aligned two column grid">
+              <div class="column">
+                <h3 class="ui teal header">排片表</h3>
+              </div>
+            </div>
+          </div>
+
+          <!--content-->
+          <div class="ui attached  segment no-border-besides-bottom m-bg1">
+            <div class="ui error message" th:unless="${#strings.isEmpty(message1)}">
+              <i class="close icon"></i>
+              <div class="header">提示：</div>
+              <p th:text="${message1}">操作成功！</p>
+            </div>
+            <div class="ui padded vertical segment m-padded-tb-big m-margin-bottom-big no-border-besides-bottom" th:each="movie : ${movies}">
+              <div class="ui middle aligned mobile reversed stackable grid">
+
+                <div class="five wide column">
+                    <img src="https://unsplash.it/800/450?image=1005" style="width: 200px!important;height: 300px!important;" th:src="@{${movie.poster}}" alt="" class="ui rounded image">
+                </div>
+
+                <div class="eleven wide column">
+                  <h1 class="ui header" style="color: #494949;" th:text="${movie.name}">打个商量，放过它</h1>
+                  <span class="m-span-show">导演：</span><span class="m-text-show" th:text="${movie.director}">导演</span>
+                  <br>
+                  <span class="m-span-show">编剧：</span><span class="m-text-show" th:text="${movie.scriptwriter}">导演</span>
+                  <br>
+                  <span class="m-span-show">主演：</span><span class="m-text-show" th:text="${movie.actor}">主演导演导演导演导演导演导演导演导演导演导演导演导演导演导演导演导演导演导演导演</span>
+                  <br>
+                  <span class="m-span-show">语言：</span><span class="m-text-show" th:text="${movie.language}">语言</span>&#12288;&#12288;&#12288;&#12288;&#12288;
+                  <span class="m-span-show">时长：</span><span class="m-text-show" th:text="|${movie.duration} 分钟|">主演</span>
+                  <br>
+                  <span class="m-span-show">类型：</span><span class="m-text-show"  th:text="${movie.genre}">主演</span>
+                  <br>
+                  <div style="margin-top: 8px!important;">
+                  <span class="m-span-show">简介：</span><span class="m-text-thin"  th:text="${movie.description}">教科书一样标准的六十分电影了。 仿佛一个绝色美人，站在顶级舞台，无数镜头锁定，一身珠光天衣，然后开始表演眼保健操。 这就不免让观众十分纠结了：你要朝她扔烂苹果或者唾骂吧，她的确有尚可之处。你要真心实意夸吧，简直又是为难自己。 以下含…...</span>
+                  </div>
+                </div>
+
+
+              </div>
+              <br>
+              <table class="ui table">
+                <thead>
+                <tr class="center aligned ">
+                  <th>放映日期</th>
+                  <th>放映时间</th>
+                  <th>散场时间</th>
+                  <th>影厅</th>
+                  <th>价格</th>
+                  <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="center aligned " th:each="schedule : ${schedules}" th:if="${schedule.movie.id==movie.id}" >
+                  <td class="m-padded-tiny" th:text="${#dates.format(schedule.beginTime,'yyyy-MM-dd')}">2019-03-03</td>
+                  <td class="m-padded-tiny" th:text="${#dates.format(schedule.beginTime,'HH:mm')}">--:--</td>
+
+                  <td class="m-padded-tiny" th:text="${#dates.hour(schedule.endTime) > #dates.hour(schedule.beginTime) ?
+             #dates.format(schedule.endTime,'HH:mm') :
+             '次日' + #dates.format(schedule.endTime,'HH:mm')}">19:22</td>
+
+                  <td class="m-padded-tiny" th:text="${schedule.screen.name}">IMAX厅</td>
+                  <td class="m-padded-tiny" th:text="${schedule.price + ' 元'}">69.0元</td>
+                  <td class="m-padded-tiny">
+                    <a th:href="@{/client/purchase/{id}(id=${schedule.id})}" class="ui teal basic button">选座购票</a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <!--footer-->
+
+
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+
+  <br>
+  <br>
+  <!--底部footer-->
+  <!--<footer class="ui inverted vertical segment m-padded-tb-massive">-->
+  <footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+
+      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2015 - 2019 All Rights Reserved &nbsp;&nbsp;/&nbsp;&nbsp; Powered by YifanCen in Amoy</p>
+      <div class="ui inverted divided stackable grid">
+        <br>
+        <br>
+        <br>
+        <br>
+      </div>
+    </div>
+
+  </footer>
+
+
+  <!--/*/<th:block th:replace="_fragments :: script">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <!--/*/</th:block>/*/-->
+
+  <script>
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+      on : 'hover'
+    });
+    //消息提示关闭初始化
+    $('.message .close')
+            .on('click', function () {
+              $(this)
+                      .closest('.message')
+                      .transition('fade');
+            });
+  </script>
+</body>
+</html>

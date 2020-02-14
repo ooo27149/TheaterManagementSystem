@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="admin/_fragments  ::  head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>影厅管理</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../../static/lib/editormd/css/editormd.min.css">
+  <link rel="stylesheet" href="../../static/css/me.css">
+</head>
+
+<body>
+
+  <!--导航-->
+  <nav th:replace="admin/_fragments  ::  menu(2)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item">影院后台</h2>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>影片管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>影厅管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tasks icon"></i>排片设置</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="book icon"></i>订单管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="copy icon"></i>管理员设置</a>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+
+  <div class="ui attached pointing menu">
+    <div class="ui container">
+      <div class="left menu m-padded-lr-responsive">
+        <a href="#" th:href="@{/admin/screen_list}" class="item">列表</a>
+        <a href="#" class="teal active item">编辑</a>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <!--中间内容-->
+  <div class="m-container-tiny m-padded-tb-big " style="min-height: 50.5em !important;">
+    <div class="ui container">
+      <form action="#" method="post" th:object="${screen}"
+        th:action="*{id}==null ? @{/admin/screen_save} : @{/admin/screen_save/{id}(id=*{id})}" class="ui form">
+        <input type="hidden" name="id" th:value="*{id}">
+
+        <div class="field">
+          <label>影厅命名</label>
+          <input type="text" name="name" th:value="*{name}">
+        </div>
+
+        <div class="two fields">
+          <div class="field">
+            <label>排数</label>
+            <input type="number" name="rowCount" th:value="*{rowCount}">
+          </div>
+          <div class="field">
+            <label>列数</label>
+            <input type="number" name="colCount" th:value="*{colCount}">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>描述信息</label>
+          <textarea name="info" th:value="*{info}" th:text="*{info}">
+          </textarea>
+        </div>
+
+
+
+        <br>
+        <br>
+
+        <div class="ui error message"></div>
+        <!--/*/
+             <div class="ui negative message" th:if="${#fields.hasErrors('name')}"  >
+               <i class="close icon"></i>
+               <div class="header">验证失败</div>
+               <p th:errors="*{name}">提交信息不符合规则</p>
+             </div>
+              /*/-->
+
+        <div class="ui right aligned container">
+          <button type="button" class="ui button" onclick="window.history.go(-1)">返回</button>
+
+          <button class="ui teal submit button">保存</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+  <br>
+
+  <!--底部footer-->
+  <footer th:replace="admin/_fragments  ::  footer" class="ui inverted vertical segment m-padded-tb-massive">
+
+    <div class="ui inverted section divider"></div>
+    <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2015 - 2019 / YifanCen / Powered by YifanCen in Amoy
+    </p>
+    </div>
+
+  </footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <script src="../../static/lib/editormd/editormd.min.js"></script>
+
+  <script>
+
+    //初始化Markdown编辑器
+
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+      on: 'hover'
+    });
+
+    $('.ui.form').form({
+      fields: {
+        nickname: {
+          identifier: 'name',
+          rules: [{
+            type: 'empty',
+            prompt: 'please enter screen name'
+          }]
+        }
+      }
+    });
+
+    $('.ui.form').form({
+      fields: {
+        password: {
+          identifier: 'rowCount',
+          rules: [{
+            type: 'empty',
+            prompt: 'please enter row count'
+          }]
+        },
+        phone: {
+          identifier: 'colCount',
+          rules: [{
+            type: 'empty',
+            prompt: 'please enter column count'
+          }]
+        }
+      }
+    });
+    //消息提示关闭初始化
+    $('.message .close')
+      .on('click', function () {
+        $(this)
+          .closest('.message')
+          .transition('fade');
+      });
+  </script>
+</body>
+
+</html>

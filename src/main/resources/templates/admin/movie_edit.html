@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="admin/_fragments  ::  head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新增电影</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../../static/lib/editormd/css/editormd.min.css">
+  <link rel="stylesheet" href="../../static/css/me.css">
+</head>
+<body>
+
+  <!--导航-->
+  <nav th:replace="admin/_fragments  ::  menu(1)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item">影院后台</h2>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>影片管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>影厅管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tasks icon"></i>排片设置</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="book icon"></i>订单管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="copy icon"></i>管理员设置</a>
+        <div class="right m-item m-mobile-hide menu">
+          <div class="ui dropdown  item">
+            <div class="text">
+              <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005">
+              Avan
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+  <div class="ui attached pointing menu">
+    <div class="ui container">
+      <div class="left menu m-padded-lr-responsive">
+        <a href="#" th:href="@{/admin/movies}" class="item">列表</a>
+        <a href="#" class="teal active item">发布</a>
+      </div>
+    </div>
+  </div>
+
+  <!--中间内容-->
+  <div  class="m-container m-padded-tb-big" style="min-height: 50.5em !important;">
+    <div class="ui container">
+      <form enctype="multipart/form-data" action="#" method="post" class="ui form" th:object="${movie}"
+            th:action="*{id}==null ? @{/admin/movie_save} : @{/admin/movie_save/{id}(id=*{id})}" >
+        <input type="hidden" name="id" th:value="*{id}">
+        <input type="hidden" name="poster" th:value="*{poster}">
+
+        <div class="required field">
+          <div class="ui left labeled input">
+            <div class="ui selection compact teal basic dropdown label">
+              <input type="hidden" name="language" th:value="*{language}" value="语言" >
+              <i class="dropdown icon"></i>
+              <div class="text">语 言</div>
+              <div class="menu">
+                <div class="item" data-value="普通话">普通话</div>
+                <div class="item" data-value="粤语">粤语</div>
+                <div class="item" data-value="英语">英语</div>
+                <div class="item" data-value="其他语言">其他语言</div>
+              </div>
+            </div>
+            <input type="text" name="name" th:value="*{name}" placeholder="电影名">
+          </div>
+        </div>
+        <br>
+        <div class="field">
+
+            <textarea placeholder="简介" name="description" th:value="*{description}" th:text="*{description}">简介
+
+            </textarea>
+
+        </div>
+        <br>
+
+        <div class="two fields">
+          <div class="field">
+            <div class="ui left labeled  input">
+              <label class="ui compact teal basic label">导演</label>
+              <input type="text" name="director" th:value="*{director}" placeholder="导演">
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui left labeled  input">
+              <label class="ui compact teal basic label">编剧</label>
+              <input type="text" name="scriptwriter" th:value="*{scriptwriter}" placeholder="编剧">
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="two fields">
+
+        <div class="field">
+          <div class="ui left labeled  input" >
+            <label class="ui  teal basic label">类型</label>
+            <input type="text" name="genre" th:value="*{genre}" placeholder="类型" >
+          </div>
+        </div>
+          <div class="field">
+          <div class="ui left labeled  input" >
+            <label class="ui  teal basic label">时长</label>
+            <input type="text" name="duration" th:value="*{duration}" placeholder="单位：分钟" >
+          </div>
+        </div>
+
+        </div>
+        <br>
+
+        <div class="field">
+          <div class="ui left labeled input">
+            <label class="ui teal basic label">主演</label>
+            <input type="text" name="actor" th:value="*{actor}" placeholder="主演">
+          </div>
+          </div>
+        <br>
+
+        <div class="field">
+          <label>上传海报图片</label>
+          <input type="file" name="file"/>
+        </div>
+
+
+        <br>
+        <div class="inline fields">
+          <label>影片状态：</label>
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input type="radio" name="stat" checked="checked" value="正在热映">
+              <label>正在热映</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input type="radio" name="stat" value="即将上映">
+              <label>即将上映</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input type="radio" name="stat" value="下线">
+              <label>下线</label>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="ui error message"></div>
+        <!--/*/
+                    <div class="ui negative message" th:if="${#fields.hasErrors('poster')}"  >
+                      <i class="close icon"></i>
+                      <div class="header">验证失败</div>
+                      <p th:errors="*{poster}">提交信息不符合规则</p>
+                    </div>
+                     /*/-->
+        <div class="ui right aligned container">
+          <button type="button" class="ui button" onclick="window.history.go(-1)" >返回</button>
+
+          <button class="ui teal submit button">发布</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <br>
+  <br>
+  <!--底部footer-->
+  <footer th:replace="admin/_fragments  ::  footer" class="ui inverted vertical segment m-padded-tb-massive">
+
+        </div>
+      </div>
+      <div class="ui inverted section divider"></div>
+      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2015 - 2019 / YifanCen / Powered by YifanCen in Amoy</p>
+    </div>
+
+  </footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="../../static/lib/editormd/editormd.min.js"></script>
+
+  <script>
+
+
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+      on : 'hover'
+    });
+
+    $('.ui.form').form({
+      fields : {
+        name : {
+          identifier: 'name',
+          rules: [{
+            type : 'empty',
+            prompt: '请输入电影名'
+          }]
+        },
+        description : {
+          identifier: 'description',
+          rules: [{
+            type : 'empty',
+            prompt: '请输入电影描述'
+          }]
+        },
+        duration : {
+          identifier: 'duration',
+          rules: [{
+            type : 'empty',
+            prompt: '请输入电影时长'
+          }]
+        }
+      }
+    });
+
+  </script>
+</body>
+</html>

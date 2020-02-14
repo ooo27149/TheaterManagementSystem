@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="admin/_fragments  ::  head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>订单列表</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../../static/css/me.css">
+</head>
+<body>
+
+  <!--导航-->
+  <nav th:replace="admin/_fragments  ::  menu(4)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item">影院后台</h2>
+        <a href="#" class="m-item item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>影片管理</a>
+        <a href="#" class="m-item item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>影厅管理</a>
+        <a href="#" class="m-item item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tasks icon"></i>排片设置</a>
+        <a href="#" class="m-item item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="book icon"></i>订单管理</a>
+        <a href="#" class="m-item item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="copy icon"></i>管理员设置</a>
+        <div class="right m-item m-mobile-hide menu">
+          <div class="ui dropdown  item">
+            <div class="text">
+              <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005">
+              Avan
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+  <div class="ui attached pointing menu">
+    <div class="ui container">
+      <div class="left menu m-padded-lr-responsive">
+        <a href="#" class="teal active item">列表</a>
+        <a href="#" th:href="@{/admin/order_listSchedule}" class="item">购票</a>
+      </div>
+    </div>
+  </div>
+
+  <!--中间内容-->
+  <div  class="m-container m-padded-tb-big " style="min-height: 50.5em !important;">
+    <div class="ui container">
+
+      <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+        <i class="close icon"></i>
+        <div class="header">提示：</div>
+        <p th:text="${message}">操作成功！</p>
+      </div>
+      <div class="ui error message" th:unless="${#strings.isEmpty(message1)}">
+        <i class="close icon"></i>
+        <div class="header">提示：</div>
+        <p th:text="${message1}">操作失败</p>
+      </div>
+
+      <div class="ui segment form">
+
+        <input type="hidden" name="page">
+
+        <div class="inline fields">
+          <div class="field">
+            <input type="text" name="phone" placeholder="手机号">
+          </div>
+          <div class="field">
+            <input type="text" name="movieName" placeholder="电影名">
+          </div>
+
+          <div class="field">
+            <button type="button" id="search-btn" class="ui  teal basic button"><i class="search icon"></i>搜索</button>
+          </div>
+        </div>
+      </div>
+      <div id="table-container">
+      <table class="ui compact teal table " th:fragment="orderList">
+        <thead>
+          <tr class="center aligned">
+            <th>类型</th>
+            <th>手机</th>
+            <th>电影</th>
+            <th>场次</th>
+            <th>影厅</th>
+            <th>座位</th>
+            <th>价格</th>
+            <!--<th>更新时间</th>-->
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="center aligned"  th:each="order, iterStat : ${page.content}">
+            <td th:text="${order.admin}==null ? '网络' : '柜台'">柜台售票</td>
+            <td th:text="${order.admin}==null ? ${order.client.phone} : ${order.admin.phone}">18978782233</td>
+            <td th:text="${order.schedule.movie.name}">搏击俱乐部</td>
+            <td th:text="${#dates.format(order.schedule.beginTime,'yyyy-MM-dd HH:mm')}">2019-03-03 17:45</td>
+            <td th:text="${order.schedule.screen.name}">IMAX厅</td>
+            <td class="m-td" th:text="${order.seats}">5排9座 5排10座 5排9座 5排10座 5排9座 5排10座</td>
+            <td th:text="${order.totalPrice + '元'}">50</td>
+            <!--<td>2019-03-02 22:45</td>-->
+            <td>
+              <a class="order_delete ui red basic button" onclick="del(this)">取消订单</a>
+              <input class="order_id" th:attr="class='order_id'+${order.id}"  type="hidden" th:value="${order.id}">
+            </td>
+            <div class="ui basic modal" th:attr="class='ui basic modal o'+${order.id}">
+              <div class="ui icon header">
+                <i class="trash alternate icon" style="display: inline-block;margin-top: -20px;margin-right: 10px;"></i>
+                确定取消订单？
+              </div>
+
+              <div class="actions" style="text-align: center;">
+                <div class="ui red basic cancel inverted button">
+                  <i class="remove icon"></i>
+                  No
+                </div>
+                <a th:href="@{/admin/{id}/order_delete(id=${order.id})}" class="ui green ok inverted button">
+                  <i class="checkmark icon"></i>Yes</a>
+              </div>
+            </div>
+          </tr>
+
+        </tbody>
+        <tfoot >
+          <tr class="">
+            <th colspan="8">
+              <div class="ui mini pagination menu" th:if="${page.totalPages}>1">
+                <a onclick="page(this)" th:attr="data-page=${page.number}-1" class="item" th:unless="${page.first}">上一页</a>
+                <a onclick="page(this)" th:attr="data-page=${page.number}+1" class="item" th:unless="${page.last}">下一页</a>
+              </div>
+              <a href="#" th:href="@{/admin/order_listSchedule}" class="ui right floated teal basic button">新增</a>
+            </th>
+          </tr>
+        </tfoot>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <br>
+  <!--底部footer-->
+  <footer th:replace="admin/_fragments  ::  footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+
+      <div class="ui inverted section divider"></div>
+      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2015 - 2019 / YifanCen / Powered by YifanCen in Amoy</p>
+    </div>
+
+  </footer>
+
+
+
+  <!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <!--/*/</th:block>/*/-->
+
+  <script>
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+      on : 'hover'
+    });
+
+    //消息提示关闭初始化
+    $('.message .close')
+            .on('click', function () {
+              $(this)
+                      .closest('.message')
+                      .transition('fade');
+            });
+    function page(obj) {
+      $("[name='page']").val($(obj).data("page"));
+      loadData();
+    }
+
+    $("#search-btn").click(function () {
+      $("[name='page']").val(0);
+      loadData();
+    });
+
+    function loadData() {
+      $("#table-container").load(/*[[@{/admin/order_list/search}]]*/"/admin/order_list/search",{
+        movieName : $("[name='movieName']").val(),
+        phone : $("[name='phone']").val(),
+        page : $("[name='page']").val()
+      });
+    }
+
+    $('#clear-btn')
+            .on('click', function() {
+              $('.ui.screen.dropdown')
+                      .dropdown('clear')
+              ;
+            });
+    function del(s) {
+      var id = s.nextElementSibling.value;
+      $('.ui.basic.modal.o'+id).modal('show');
+    }
+  </script>
+</body>
+</html>

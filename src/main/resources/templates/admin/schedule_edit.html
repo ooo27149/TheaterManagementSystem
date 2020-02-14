@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="admin/_fragments  ::  head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>排片管理</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../../static/lib/editormd/css/editormd.min.css">
+  <link rel="stylesheet" href="../../static/css/me.css">
+</head>
+<body>
+
+  <!--导航-->
+  <nav th:replace="admin/_fragments  ::  menu(3)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item">影院后台</h2>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>影片管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>影厅管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tasks icon"></i>排片设置</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="book icon"></i>订单管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="copy icon"></i>管理员设置</a>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+
+  <div class="ui attached pointing menu">
+    <div class="ui container">
+      <div class="left menu m-padded-lr-responsive">
+        <a href="#" th:href="@{/admin/schedule_list}" class="item">列表</a>
+        <a href="#" class="teal active item">发布</a>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <!--中间内容-->
+  <div  class="m-container-tiny m-padded-tb-big " style="min-height: 50.5em !important;">
+    <div class="ui container">
+
+      <div class="ui error message" th:unless="${#strings.isEmpty(message)}">
+        <i class="close icon"></i>
+        <div class="header">提示：</div>
+        <p th:text="${message}">放映时间错误</p>
+      </div>
+
+      <form action="#" method="post"  th:object="${scheduleReleaseQuery}"
+            th:action="@{/admin/schedule_save}"
+      class="ui form">
+      <!--th:action="*{id}==null ? @{/admin/schedule_save} : @{/admin/schedule_save/{id}(id=*{id})}"-->
+
+        <!--<input type="hidden" name="id" th:value="*{id}">-->
+
+        <div class="field">
+          <label>选择影厅</label>
+          <div class="ui selection dropdown">
+            <!--<input type="hidden"  name="screen.id">-->
+            <input type="hidden"  name="screen.id" th:value="${scheduleReleaseQuery}!= null ? *{screen.id}">
+            <i class="dropdown icon"></i>
+            <div class="default text">5号厅</div>
+            <div class="menu">
+              <div class="item" th:each="screen :  ${screens}"
+                   th:data-value="${screen.id}" th:text="${screen.name}">1号厅</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>选择电影</label>
+          <div class="ui selection dropdown">
+            <!--<input type="hidden"  name="movie.id" >-->
+            <input type="hidden"  name="movie.id" th:value="${scheduleReleaseQuery}!= null ? *{movie.id}">
+            <i class="dropdown icon"></i>
+            <div class="default text">月升王国</div>
+            <div class="menu">
+              <div class="item" th:each="movie :  ${movies}"
+                   th:data-value="${movie.id}" th:text="${movie.name}">路边野餐</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>定价</label>
+          <div class="ui right labeled input">
+            <label for="amount" class="ui label">$</label>
+            <!--<input type="number" name="price" placeholder="价格" id="amount" >-->
+            <input type="number" name="price" placeholder="价格" id="amount"
+                   th:value="${scheduleReleaseQuery}!= null ? *{price}">
+            <div class="ui basic label">元</div>
+          </div>
+        </div>
+
+        <div class="field m-padded-tb-tiny">
+          <label>放映时间</label>
+          <div class="ui calendar" id="filmDate">
+            <div class="ui input left icon">
+              <i class="calendar icon"></i>
+              <input type="text" id="beginDate" name="beginDate" placeholder="2019-04-01"
+                     value="2019-04-01" th:value="${scheduleReleaseQuery}!= null ? *{beginDate}">
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui calendar center aligned" id="example6">
+            <div class="ui input left icon ">
+              <i class="time icon"></i>
+              <input type="time" id="appt" name="beginTime"
+                    required th:value="${scheduleReleaseQuery}!= null ? *{beginTime}">
+            </div>
+          </div>
+        </div>
+
+        <!--<div class="ui error message"></div>-->
+        <br>
+        <br>
+
+        <div class="ui right aligned container">
+          <button type="button" class="ui button" onclick="window.history.go(-1)" >返回</button>
+          <button class="ui teal submit button" type="submit">发布</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <br>
+
+  <!--底部footer-->
+  <footer  th:replace="admin/_fragments  ::  footer"class="ui inverted vertical segment m-padded-tb-massive">
+
+      <div class="ui inverted section divider"></div>
+      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2015 - 2019 / YifanCen / Powered by YifanCen in Amoy</p>
+    </div>
+
+  </footer>
+
+  <!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <!--/*/</th:block>/*/-->
+  <script>
+
+    //初始化Markdown编辑器
+
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+      on : 'hover'
+    });
+
+
+    //初始化日期控件
+    $('#filmDate').calendar({
+      type: 'date',
+      formatter: { // 自定义日期的格式
+        date: function(date, settings) {
+          if (!date) return '';
+
+          var year  = date.getFullYear();
+          var month = date.getMonth() + 1;
+          var day   = date.getDate();
+
+          month = month < 10 ? '0'+month : month;
+          day   = day   < 10 ? '0'+day   : day;
+
+          return year + '-' + month + '-' + day;
+        }
+      }
+    });
+
+
+    $('.ui.form').form({
+      fields : {
+        price : {
+          identifier: 'price',
+          rules: [{
+            type : 'empty',
+            prompt: 'please enter price'
+          }]
+        }
+      }
+    });
+
+    $('.ui.form').form({
+      fields : {
+        beginDate : {
+          identifier: 'beginDate',
+          rules: [{
+            type : 'empty',
+            prompt: 'please enter begin date'
+          }]
+        },
+        beginTime : {
+          identifier: 'beginTime',
+          rules: [{
+            type : 'empty',
+            prompt: 'please enter begin time'
+          }]
+        }
+      }
+    });
+    //消息提示关闭初始化
+    $('.message .close')
+            .on('click', function () {
+              $(this)
+                      .closest('.message')
+                      .transition('fade');
+            });
+
+  </script>
+</body>
+</html>

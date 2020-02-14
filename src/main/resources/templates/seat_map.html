@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragments  ::  head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>座位选择</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../../static/css/me.css">
+  <link rel="stylesheet" href="../../static/css/seatchart.css">
+
+</head>
+<body>
+
+  <!--导航-->
+  <nav th:replace="_fragments :: menu(0)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item">影院后台</h2>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>影片管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>影厅管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tasks icon"></i>排片设置</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="book icon"></i>订单管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="copy icon"></i>管理员设置</a>
+        <div class="right m-item m-mobile-hide menu">
+          <div class="ui dropdown  item">
+            <div class="text">
+              <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005">
+              Avan
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+  <div class="m-margin-top-large field" style="margin-left: 10.5em!important;">
+    <div class="ui horizontal list">
+      <div class="item">
+        <div class="content">
+          <div class="ui header" th:text="${schedule.screen.name}" >Molly</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+      <div id="map-container" style="float: left!important;  margin-left: 6em!important;" class="m-container-big" ></div>
+
+      <div style="float: left!important;" class="m-container-big m-padded-tb-big ">
+        <div class="s-containers">
+          <div id="legend-container" style="max-width: 18em !important; display: flex!important; float: left!important;"></div>
+          <div id="shoppingCart-container" style="max-width: 18em !important; display: flex!important; float: left!important;"></div>
+        </div>
+
+        <form th:object="${schedule}" id='test_form' th:action="@{/client/order_confirm} " method="post"
+              onsubmit="return checkForm()">
+          <input type="hidden" name="schedule" th:value="${schedule.id}" value=""/>
+          <input type="hidden" name="total_price" id="total_price" value=""/>
+          <input type="hidden" name="seats" id="seats" value=""/>
+          <!--<div class="ui left aligned container" >-->
+          <button type="button" class="ui button" onclick="window.history.go(-1)" >返回</button>
+          <button class="ui teal submit button" type="submit">提交订单</button>
+          <!--</div>-->
+        </form>
+      </div>
+
+  <!--/*/<th:block th:replace="_fragments :: script">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <!--/*/</th:block>/*/-->
+  <script type="text/javascript" src="../static/js/seatbuy.js" th:src="@{/js/seatbuy.js}"></script>
+
+  <script >
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+      on : 'hover'
+    });
+
+
+    var map = {
+      rows: [[${rows}]],
+      cols: [[${cols}]],
+      reserved: [[${reserved}]],
+      disabled: [[${roads}]]
+
+    };
+
+
+    var types = [
+      { type: "已选", color: "#008080", price: [[${schedule.price}]]  }
+    ];
+
+    var sc = new SeatchartJS(map, types);
+    var currency = "元";
+
+    sc.setAssetsSrc("[[@{/assets}]]");
+    sc.setCurrency(currency);
+    sc.setSoundEnabled(false);
+    sc.setShoppingCartWidth(200);
+    sc.setShoppingCartHeight(250);
+    // sc.setMouseDownInterval(100);
+
+    sc.createMap("map-container");
+    sc.createLegend("legend-container");
+    sc.createShoppingCart("shoppingCart-container");
+
+    function checkForm(){
+
+      var o=sc.getShoppingCart();
+      if(o["已选"].length>4){
+        alert("一次最多可选4个座位");
+        return false;
+      }
+
+      var total_price = document.getElementById('total_price');
+      var seats= document.getElementById('seats');
+      total_price.value = sc.getTotal();
+      seats.value = o["已选"];
+      return true;
+    }
+
+
+  </script>
+</body>
+</html>

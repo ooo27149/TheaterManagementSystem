@@ -1,0 +1,263 @@
+/* Seat map css */
+
+.seatChart-container {
+    cursor: default!important;
+    user-select: none!important;
+    -webkit-user-select: none!important;
+    -moz-user-select: none!important;
+    -ms-user-select: none!important;
+    font-family: "RobotoDraft", "Roboto", sans-serif!important;
+    margin: 10px!important;
+}
+
+.seatChart-title {
+    margin: 0!important;
+    padding: 10px 0 0!important;
+}
+
+.seatChart-title img {
+    float: left!important;
+    display: block!important;
+
+    /* ie and edge require height to be set and width to be auto set, not the opposite */
+    height: 20px!important;
+    width: auto!important;
+    margin: 0!important;
+    padding: 0!important;
+}
+
+.seatChart-title h3 {
+    display: inline-block!important;
+    height: 20px!important;
+    line-height: 20px!important;
+    margin: 0!important;
+    padding: 0 0 0 10px!important;
+}
+
+.seatChart-small-title {
+    margin: 0!important;
+    padding: 15px 0 0!important;
+}
+
+.seatChart-seat {
+    box-sizing: border-box!important;
+    -webkit-box-sizing: border-box!important;
+    -moz-box-sizing: border-box!important;
+
+    position: relative!important;
+    color: white!important;
+
+    border-top-left-radius: 10px!important;
+    -webkit-border-top-left-radius: 10px!important;
+
+    border-top-right-radius: 10px!important;
+    -webkit-border-top-right-radius: 10px!important;
+
+    height: 40px!important;
+    width: 40px!important;
+    margin: 3px!important;
+    line-height: 40px!important;
+    float: left!important;
+    text-align: center!important;
+    vertical-align: middle!important;
+    font-family: "Lato", sans-serif!important;
+}
+
+.seatChart-front {
+    color: #787878!important;
+    border-radius: 5px!important;
+    -webkit-border-radius: 5px!important;
+    height: 40px!important;
+    line-height: 40px!important;
+    margin: 4px!important;
+    float: left!important;
+    text-align: center!important;
+    vertical-align: middle!important;
+    background-color: #f3f3f3!important;
+}
+
+.seatChart-seat.index {
+    background-color: transparent!important;
+    color: #4b4949!important;
+}
+
+.seatChart-seat.blank {
+    background-color: transparent!important;
+    color: transparent!important;
+}
+
+.seatChart-seat.blank img {
+    height: 15px!important;
+    width: auto!important;
+
+    /* makes img stay centered */
+    position: absolute!important;
+    margin: auto!important;
+    top: 0!important;
+    bottom: 0!important;
+    left: 0!important;
+    right: 0!important;
+}
+
+.seatChart-seat.blank {
+    color: transparent!important;
+}
+
+.seatChart-seat {
+    color: #fff!important;
+    line-height: 40px!important;
+    text-align: center!important;
+    font-family: "Lato", sans-serif!important;
+}
+
+.seatChart-container {
+    cursor: default!important;
+    font-family: "RobotoDraft", "Roboto", sans-serif!important;
+}
+
+.seatChart-seat.available {
+    cursor: pointer!important;
+    background-color: #80c2d1!important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)!important;
+}
+
+.seatChart-seat.available:hover {
+    background-color: #a0d3de!important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.12)!important;
+}
+
+.seatChart-seat.unavailable {
+    background-color: rgb(210, 210, 210)!important;
+    cursor: not-allowed!important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.06)!important;
+}
+
+.seatChart-seat.clicked {
+    cursor: pointer!important;
+    box-shadow: 0 1px 3px rgba(160, 106, 106, 0.06), 0 1px 2px rgba(0, 0, 0, 0.12)!important;
+}
+
+/* Seat legend css */
+
+.seatChart-legend-list {
+    list-style-type: none!important;
+    margin: 0!important;
+    padding: 0 0 15px!important;
+}
+
+.seatChart-legend-item {
+    margin: 0!important;
+    padding: 10px 0 0!important;
+    vertical-align: middle!important;
+    line-height: 25px!important;
+}
+
+.seatChart-legend-description {
+    display: inline-block!important;
+    margin: 0 0 0 10px!important;
+}
+
+.seatChart-seat.legend-style {
+    cursor: default!important;
+    float: left!important;
+    width: 25px!important;
+    height: 25px!important;
+    margin: 0!important;
+
+    border-top-right-radius: 5px!important;
+    -webkit-border-top-right-radius: 5px!important;
+
+    border-top-left-radius: 5px!important;
+    -webkit-border-top-left-radius: 5px!important;
+
+    pointer-events: none!important;
+}
+
+/* Shopping cart css */
+
+.seatChart-sc-items-container {
+    margin: 15px 0 0!important;
+    padding: 0!important;
+    border: 1px solid #f3f3f3!important;
+    overflow-y: auto!important;
+    overflow-x: hidden!important;
+}
+
+.seatChart-sc-item {
+    border-bottom: 1px solid #afafaf!important;
+    width: 200px!important;
+    height: 30px!important;
+    margin: 0 1px 0 0!important;
+    padding: 6px 0 0!important;
+}
+
+.seatChart-sc-delete {
+    cursor: pointer!important;
+
+    /* makes img stay centered */
+    position: relative!important;
+    background-color: #db2c2c!important;
+
+    /* makes it stay at the right of the container */
+    margin: auto 10px auto auto!important;
+    height: 25px!important;
+    width: 25px!important;
+    border-radius: 5px!important;
+    -webkit-border-radius: 5px!important;
+}
+
+.seatChart-sc-delete img {
+    height: 15px!important;
+    width: 15px!important;
+
+    /* makes img stay centered */
+    position: absolute!important;
+    margin: auto!important;
+    top: 0!important;
+    bottom: 0!important;
+    left: 0!important;
+    right: 0!important;
+}
+
+.seatChart-sc-delete.all {
+    margin: 15px 0 0!important;
+    padding: 0!important;
+    width: 60px!important;
+}
+
+.seatChart-sc-delete.all img {
+    right: auto!important;
+    left: auto!important;
+    padding-left: 5px!important;
+    float: left!important;
+}
+
+.seatChart-sc-delete.all p {
+    color: white!important;
+    text-align: center!important;
+
+    line-height: 25px!important;
+    padding: 0!important;
+    margin: 0 0 0 20px!important;
+}
+
+.seatChart-sc-delete:hover {
+    background-color: #db4646!important;
+}
+
+.seatChart-sc-total {
+    margin: 0!important;
+    padding: 0!important;
+    float: right!important;
+    display: block!important;
+    line-height: 25px!important;
+}
+
+.seatChart-sc-description {
+    float: left!important;
+    display: block!important;
+    margin: auto!important;
+    padding: 0 10px!important;
+    font-size: 14px!important;
+    line-height: 25px!important;
+}

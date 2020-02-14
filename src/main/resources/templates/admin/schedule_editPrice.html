@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="admin/_fragments  ::  head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>排片管理</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../../static/lib/editormd/css/editormd.min.css">
+  <link rel="stylesheet" href="../../static/css/me.css">
+</head>
+<body>
+
+  <!--导航-->
+  <nav th:replace="admin/_fragments  ::  menu(3)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item">影院后台</h2>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>影片管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>影厅管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tasks icon"></i>排片设置</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="book icon"></i>订单管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="copy icon"></i>管理员设置</a>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+
+  <div class="ui attached pointing menu">
+    <div class="ui container">
+      <div class="left menu m-padded-lr-responsive">
+        <a href="#" th:href="@{/admin/schedule_list}" class="item">列表</a>
+        <a href="#" class="teal active item">编辑</a>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <!--中间内容-->
+  <div  class="m-container-tiny m-padded-tb-big " style="min-height: 50.5em !important;">
+    <div class="ui container">
+
+      <div class="ui error message" th:unless="${#strings.isEmpty(message)}">
+        <i class="close icon"></i>
+        <div class="header">提示：</div>
+        <p th:text="${message}">放映时间错误</p>
+      </div>
+
+      <form action="#" method="post"  th:object="${schedule}"
+            th:action="@{/admin/schedule_save/{id}(id=*{id})}" class="ui form">
+
+        <input type="hidden" name="id" th:value="*{id}">
+
+        <div class="item">
+          <!--<img class="ui mini circular image" src="/images/avatar2/small/molly.png">-->
+          <div class="content">
+            <div class="ui header" th:text="${schedule.movie.name}" >Molly</div>
+            <div th:text="${schedule.screen.name}" > Coordinator</div>
+            <span th:text="${schedule.beginTime}" > Coordinator</span><span> &nbsp;&nbsp;to&nbsp;&nbsp; </span><span th:text="${#dates.hour(schedule.endTime) > #dates.hour(schedule.beginTime) ?
+             #dates.hour(schedule.endTime) + ':' + #dates.minute(schedule.endTime) :
+             '次日' + #dates.hour(schedule.endTime) + ':' + #dates.minute(schedule.endTime)}" > Coordinator</span>
+
+          </div>
+        </div>
+        <br>
+        <div class="field">
+          <label>编辑价格</label>
+          <div class="ui right labeled input">
+            <label for="amount" class="ui label">$</label>
+            <!--<input type="number" name="price" placeholder="价格" id="amount" >-->
+            <input type="number" name="price" placeholder="价格" id="amount"
+                   th:value="*{price}">
+            <div class="ui basic label">元</div>
+          </div>
+        </div>
+
+
+        <br>
+        <br>
+
+        <div class="ui right aligned container">
+          <button type="button" class="ui button" onclick="window.history.go(-1)" >返回</button>
+          <button class="ui teal submit button" type="submit">保存</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <br>
+
+  <!--底部footer-->
+  <footer  th:replace="admin/_fragments  ::  footer"class="ui inverted vertical segment m-padded-tb-massive">
+
+      <div class="ui inverted section divider"></div>
+      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2015 - 2019 / YifanCen / Powered by YifanCen in Amoy</p>
+    </div>
+
+  </footer>
+
+  <!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <!--/*/</th:block>/*/-->
+  <script>
+
+    //初始化Markdown编辑器
+
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+      on : 'hover'
+    });
+
+    $('.ui.form').form({
+      fields : {
+        nickname : {
+          identifier: 'price',
+          rules: [{
+            type : 'empty',
+            prompt: 'please enter price'
+          }]
+        }
+      }
+    });
+
+    //消息提示关闭初始化
+    $('.message .close')
+            .on('click', function () {
+              $(this)
+                      .closest('.message')
+                      .transition('fade');
+            });
+
+  </script>
+</body>
+</html>

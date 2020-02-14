@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="_fragments  ::  head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人资料</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../static/lib/editormd/css/editormd.min.css">
+  <link rel="stylesheet" href="../static/css/me.css">
+</head>
+
+<body>
+
+  <!--导航-->
+  <nav th:replace="_fragments  ::  menu(0)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item">影院后台</h2>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>影片管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>影厅管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tasks icon"></i>排片设置</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="book icon"></i>订单管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="copy icon"></i>管理员设置</a>
+        <div class="right m-item m-mobile-hide menu">
+          <div class="ui dropdown  item">
+            <div class="text">
+              <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005">
+              Avan
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+
+  <!--中间内容-->
+  <div class="m-container-tiny m-padded-tb-massive" style="min-height: 50.5em !important;">
+    <div class="ui container">
+
+      <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+        <i class="close icon"></i>
+        <div class="header">提示：</div>
+        <p th:text="${message}">密码修改成功</p>
+      </div>
+      <div class="ui success message" th:unless="${#strings.isEmpty(message1)}">
+        <i class="close icon"></i>
+        <div class="header">提示：</div>
+        <p th:text="${message1}">头像成功</p>
+      </div>
+        <div class="ui error message" th:unless="${#strings.isEmpty(messageError)}">
+            <i class="close icon"></i>
+            <div class="header">提示：</div>
+            <p th:text="${messageError}">放映时间错误</p>
+        </div>
+      <form enctype="multipart/form-data" method="post"  th:object="${client}"
+            th:action="@{/client_save/{id}(id=*{id})}" class="ui form">
+
+        <input type="hidden" name="id" th:value="*{id}">
+        <br>
+        <div class=" field">
+        <div class="ui horizontal list">
+          <div class="item">
+            <div class="content">
+                <div class="text">
+                    <img class="ui avatar image" th:src="@{${client.avatar}}" src="https://unsplash.it/100/100?image=1005">
+                    <span class="ui header" style="display: inline" th:text="${client.username}">Avan</span>
+                </div>
+                <br>
+                <div th:text="${client.email}" > Coordinator</div>
+                <div th:text="${client.phone}" > Coordinator</div>
+            </div>
+        </div>
+        </div>
+        </div>
+
+        <div class="field">
+          <label>更换头像</label>
+          <input type="file" name="file"/>
+        </div>
+
+
+
+        <br>
+
+         <div class="field">
+          <label>更改密码</label>
+          <input type="password" name="password" id="password"  placeholder="密码">
+        </div>
+         <div class="field">
+          <label>确认密码</label>
+          <input type="password" name="confirmPassword" id="confirmPassword" placeholder="确认密码">
+        </div>
+
+        <br>
+        <br>
+        <div class="ui right aligned container">
+          <button type="button" class="ui button" onclick="window.history.go(-1)" >返回</button>
+          <button class="ui teal submit button" id="save-btn">保存</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!--底部footer-->
+  <footer  th:replace="_fragments  ::  footer"class="ui inverted vertical segment m-padded-tb-massive">
+      <div class="ui inverted section divider"></div>
+      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2015 - 2019 / YifanCen / Powered by YifanCen in Amoy</p>
+    </div>
+  </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="../static/lib/editormd/editormd.min.js"></script>
+
+  <script>
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+      on: 'hover'
+    });
+
+    //消息提示关闭初始化
+    $('.message .close')
+      .on('click', function () {
+        $(this)
+          .closest('.message')
+          .transition('fade');
+      });
+  </script>
+</body>
+</html>

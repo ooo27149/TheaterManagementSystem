@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css" >
+    <link rel="stylesheet" href="../../static/css/me.css">
+</head>
+<body>
+<!--导航-->
+<nav th:replace="_fragments :: menu(0)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">影院后台</h2>
+            <a href="#" th:href="@{/admin/movies}" class=" item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>影片管理</a>
+            <a href="#" class=" item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>影厅管理</a>
+            <a href="#" class=" item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tasks icon"></i>排片设置</a>
+            <a href="#" class=" item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="book icon"></i>订单管理</a>
+            <a href="#" class=" item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="copy icon"></i>管理员设置</a>
+            <div class="right m-item m-mobile-hide menu">
+                <div class="ui dropdown  item">
+                    <div class="text">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+<div  class="m-container m-padded-tb-big" style="min-height: 50.5em !important;">
+<br>
+<br>
+<br>
+<div class="m-container-bbbbug m-padded-tb-massive">
+    <div class="ui error message m-padded-tb-huge">
+        <h2>500</h2>
+        <p>sorry, please contact the admin</p>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+</div>
+<footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2015 - 2019 / Yifan Cen / Powered by Yifan Cen in Amoy</p>
+    </div>
+
+</footer>
+
+
+</body>
+</html>

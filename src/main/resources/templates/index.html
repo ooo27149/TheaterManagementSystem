@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="admin/_fragments  ::  head(~{::title})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+</head>
+
+<body class="m-index">
+
+<div style="margin:0px 40px!important;">
+    <img class="ui image spaced left" src="../static/images/GoldenPalmIndex.png" th:src="@{/images/GoldenPalmIndex.png}" style="width: 136px; height: 139px;"></div>
+
+            <a class="ui massive teal button" th:href="@{/tweets}" style="margin-left:70%;margin-top:30%;">EXTEND LIFE</a>
+
+
+            <!--/*/<th:block th:replace="_fragments :: script">/*/-->
+            <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+            <!--/*/</th:block>/*/-->
+
+</body>
+
+</html>

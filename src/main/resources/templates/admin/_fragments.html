@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<!--head(title)：title为参数-->
+<head th:fragment="head(title)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:replace="${title}">影院管理</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../static/css/typo.css" th:href="@{/css/typo.css}">
+  <link rel="stylesheet" href="../static/css/animate.css" th:href="@{/css/animate.css}">
+  <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}">
+  <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}">
+  <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
+  <link rel="stylesheet" href="../static/css/calendar.css" th:href="@{/css/calendar.css}">
+  <link rel="stylesheet" href="../../static/css/seatchart.css" th:href="@{/css/seatchart.css}">
+  <link rel="stylesheet" href="../static/lib/editormd/css/editormd.css" th:href="@{/lib/editormd/css/editormd.css}">
+</head>
+<body>
+
+
+<!--导航-->
+<nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+  <div class="ui container">
+    <div class="ui inverted secondary stackable menu">
+      <a style="line-height: 48px;padding-right: 15px;" th:href="@{/admin/index}"><img class="ui image spaced left" src="../static/images/GoldenPalm.jpg" th:src="@{/images/GoldenPalm.jpg}" style="width: 70px; height: 35px;"></a>
+
+      <a href="#" th:href="@{/admin/tweet_list}" class="m-item item m-mobile-hide" th:classappend="${n==6} ? 'active'"><i class="file alternate icon"></i>影讯</a>
+      <a href="#" th:href="@{/admin/movies}" class="m-item item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>影片</a>
+      <a href="#" th:href="@{/admin/screen_list}" class="m-item item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="file video outline icon"></i>影厅</a>
+      <a href="#" th:href="@{/admin/schedule_list}" class="m-item item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tasks icon"></i>排片</a>
+      <a href="#" th:href="@{/admin/order_list}" class="m-item item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="paste icon"></i>订单</a>
+      <a href="#" th:href="@{/admin/admin_list}" class="m-item item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="address book icon"></i>管理员</a>
+      <div class="right m-item m-mobile-hide menu">
+        <div class="ui dropdown  item">
+          <div class="text">
+            <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005" th:src="@{${session.admin.avatar}}">
+            <span th:text="${session.admin.nickname}">Avan</span>
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <a href="#" th:href="@{/admin/info}" class="item">个人资料</a>
+            <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show m-margin-zero">
+    <i class="sidebar icon"></i>
+  </a>
+</nav>
+
+
+
+<!--底部footer-->
+<footer th:fragment="footer" class="footer ui inverted vertical segment m-padded-tb" style="position: relative;bottom: 0px;width: 100%;">
+  <div class="ui center aligned container">
+
+    <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2015 - 2019 Powered by YifanCen in Amoy</p>
+    <div class="ui inverted divided stackable grid">
+      <br>
+      <br>
+
+    </div>
+  </div>
+</footer>
+
+<th:block th:fragment="script">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+  <script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
+  <script src="../static/lib/tocbot/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
+  <script src="../static/lib/qrcode/qrcode.min.js" th:src="@{/lib/qrcode/qrcode.min.js}"></script>
+  <script src="../static/lib/waypoints/jquery.waypoints.min.js" th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
+  <script src="../../static/lib/editormd/editormd.js" th:src="@{/lib/editormd/editormd.js}"></script>
+  <script src="../static/lib/calendar.js" charset="utf-8" th:src="@{/lib/calendar.js}"></script>
+</th:block>
+<!--<script type="text/javascript" src="../../static/js/seatchart.js" th:src="@{/js/seatchart.js}"></script>-->
+
+</body>
+</html>

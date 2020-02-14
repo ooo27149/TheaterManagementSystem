@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragments :: head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>影讯详情</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../static/css/typo.css">
+  <link rel="stylesheet" href="../static/css/animate.css">
+  <link rel="stylesheet" href="../static/lib/prism/prism.css">
+  <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css">
+  <link rel="stylesheet" href="../static/css/me.css">
+</head>
+<body>
+
+  <!--导航-->
+  <nav th:replace="_fragments :: menu(3)"  class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item">Blog</h2>
+        <a href="#" th:href="@{/movies}" class=" item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>正在热映</a>
+        <a href="#" th:href="@{/upcoming}" class=" item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="file video outline icon"></i>即将上映</a>
+        <a href="#" th:href="@{/tweets}" class=" item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tasks icon"></i>最新影讯</a>
+        <div class="right m-item item m-mobile-hide">
+          <div class="ui icon inverted transparent input m-margin-tb-tiny">
+            <input type="text" placeholder="Search....">
+            <i class="search link icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+
+  <!--中间内容-->
+  <div id="waypoint" class="m-container m-padded-tb-big animated fadeIn" style="min-height: 50.5em !important;">
+    <div class="ui container">
+      <div class="ui top attached segment">
+        <div class="ui horizontal link list">
+          <div class="item">
+            <img src="https://unsplash.it/100/100?image=1005"  th:src="@{${tweet.admin.avatar}}" alt="" class="ui avatar image">
+            <div class="content"><a href="#" th:text="${tweet.admin.nickname}" class="header">YifanCen</a></div>
+          </div>
+          <div class="item">
+            <i class="calendar icon"></i><span th:text="${#dates.format(tweet.updateTime,'yyyy-MM-dd')}">2018-10-01</span>
+          </div>
+        </div>
+      </div>
+      <div class="ui attached segment">
+        <!--图片区域-->
+        <img src="https://unsplash.it/800/450?image=1005" th:src="@{${tweet.poster}}" alt="" class="ui fluid rounded image">
+      </div>
+      <div class="ui  attached padded segment">
+        <!--内容-->
+        <div class="ui right aligned basic segment">
+          <div class="ui orange basic label" th:text="${tweet.type}">原创</div>
+        </div>
+
+        <h2 class="ui center aligned header" th:text="${tweet.title}">关于刻意练习的清单</h2>
+        <br>
+
+        <div id="content" class="typo  typo-selection js-toc-content m-padded-lr-responsive m-padded-tb-large" th:utext="${tweet.content}">
+
+          <h2 id="section1">一、关于 <i class="serif">Typo.css</i></h2>
+
+          <pre><code class="language-css">p { color: red }</code></pre>
+
+          <h4>List style in action</h4>
+          <ul>
+            <li>If you wish to succeed, you should use persistence as your good friend, experience as your reference, prudence as
+              your brother and hope as your sentry.
+              <p>如果你希望成功，当以恒心为良友，以经验为参谋，以谨慎为兄弟，以希望为哨兵。</p>
+            </li>
+            <li>Sometimes one pays most for the things one gets for nothing.
+              <p>有时候一个人为不花钱得到的东西付出的代价最高。</p>
+            </li>
+            <li>Only those who have the patience to do simple things perfectly ever acquire the skill to do difficult things
+              easily.
+              <p>只有有耐心圆满完成简单工作的人，才能够轻而易举的完成困难的事。</p>
+            </li>
+          </ul>
+
+          <h4>You may want to create a perfect <code>&lt;hr /&gt;</code> line, despite the fact that there will never have one
+          </h4>
+          <hr/>
+          <p><abbr title="法国作家罗切福考尔德">La Racheforcauld</abbr> said:
+            <mark>"Few things are impossible in themselves; and it is often for want of will, rather than of means, that man fails
+              to succeed".
+            </mark>
+            You just need to follow the browser's behavior, and set a right <code>margin</code> to it。it will works nice as the
+            demo you're watching now. The following code is the best way to render typo in Chinese:
+          </p>
+
+
+          <h3 id="section3">三、附录</h3>
+
+          <h5 id="appendix1">1、<i class="serif">Typo.css</i> 排版偏重点</h5>
+          <table class="ui table" summary="Typo.css 排版偏重点">
+            <thead>
+            <tr>
+              <th>类型</th>
+              <th>语义</th>
+              <th>标签</th>
+              <th>注意点</th>
+            </tr>
+            </thead>
+                      </table>
+
+          <h5 id="appendix2">2、开源许可</h5>
+
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+
+
+
+  <br>
+  <br>
+  <!--底部footer-->
+  <footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+
+
+  </footer>
+
+  <!--/*/<th:block th:replace="_fragments :: script">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+  
+<script src="../static/lib/prism/prism.js"></script>
+<script src="../static/lib/tocbot/tocbot.min.js"></script>
+<script src="../static/lib/qrcode/qrcode.min.js"></script>
+<script src="../static/lib/waypoints/jquery.waypoints.min.js"></script>
+  <!--/*/</th:block>/*/-->
+
+
+
+
+  <script>
+
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+      on : 'hover'
+    });
+
+
+
+    tocbot.init({
+      // Where to render the table of contents.
+      tocSelector: '.js-toc',
+      // Where to grab the headings to build the table of contents.
+      contentSelector: '.js-toc-content',
+      // Which headings to grab inside of the contentSelector element.
+      headingSelector: 'h1, h2, h3',
+    });
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="admin/_fragments  ::  head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>电影列表</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../../static/css/me.css">
+</head>
+<body>
+
+  <!--导航-->
+  <nav th:replace="admin/_fragments  ::  menu(1)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item">影院后台</h2>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>影片管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>影厅管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tasks icon"></i>排片设置</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="book icon"></i>订单管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="copy icon"></i>管理员设置</a>
+        <div class="right m-item m-mobile-hide menu">
+          <div class="ui dropdown  item">
+            <div class="text">
+              <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005">
+              Avan
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+  <div class="ui attached pointing menu">
+    <div class="ui container">
+      <div class="left menu m-padded-lr-responsive">
+        <a href="#" class="teal active item">列表</a>
+        <a href="#" th:href="@{/admin/movie_edit}" class="item" >发布</a>
+      </div>
+    </div>
+  </div>
+
+  <!--中间内容-->
+  <div class="m-container m-padded-tb-big " style="min-height: 50.5em !important;">
+    <div class="ui container ">
+
+      <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+        <i class="close icon"></i>
+        <div class="header">提示：</div>
+        <p th:text="${message}">操作成功！</p>
+      </div>
+      <div class="ui error message" th:unless="${#strings.isEmpty(messageError)}">
+        <i class="close icon"></i>
+        <div class="header">提示：</div>
+        <p th:text="${messageError}">messageError</p>
+      </div>
+      <div  class="ui segment form">
+
+        <input type="hidden" name="page">
+
+        <div class="inline fields">
+          <div class="field">
+            <input type="text" name="name" placeholder="电影名">
+          </div>
+          <div class="field">
+            <div class="ui labeled action input">
+            <div class="ui genre selection dropdown">
+              <input type="hidden" name="genre" >
+              <i class="dropdown icon"></i>
+              <div class="default text">语言</div>
+              <div class="menu">
+                <div class="item" data-value="">语言</div>
+                <div class="item" data-value="普通话">普通话</div>
+                <div class="item" data-value="粤语">粤语</div>
+                <div class="item" data-value="英语">英语</div>
+                <div class="item" data-value="其他语言">其他语言</div>
+              </div>
+            </div>
+              <button id="clear-btn" class=" ui icon button"><i class="icon trash alternate outline"></i></button>
+              </div>
+          </div>
+          <div class="field">
+            <button  type="button" id="search-btn" class="ui teal basic button"><i class="search icon"></i>搜索</button>
+          </div>
+        </div>
+      </div>
+  <div id="table-container">
+      <table class="ui compact teal table" th:fragment="movieList">
+        <thead>
+          <tr class="center aligned" >
+
+            <th>状&nbsp;态</th>
+            <th>电&nbsp;影&nbsp;名</th>
+            <th>导&nbsp;演</th>
+            <th>主&nbsp;演</th>
+            <th>&nbsp;类&nbsp;型&nbsp;</th>
+            <th>时&nbsp;长</th>
+            <!--<th>更新时间</th>-->
+            <th>操&nbsp;作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="center aligned" th:each="movie, iterStat : ${page.content}">
+
+            <td class="m-td" th:text="${movie.stat}">上映中</td>
+            <td class="m-td" th:text="${movie.name}" >搏击俱乐部</td>
+            <td class="m-td" style="max-width: 100px!important;" th:text="${movie.director}">大卫芬奇</td>
+            <td class="m-td" th:text="${movie.actor}">布拉德皮特布拉德皮特布拉德皮特布拉德皮特布拉德皮特</td>
+            <td class="m-td" style="max-width: 100px!important;" th:text="${movie.genre}">英语</td>
+            <td class="m-td" th:text="${movie.duration} + ' min'">139 min</td>
+            <!--<td th:text="${movie.updateTime}">2019-3-02 09:45</td>-->
+            <td  class="">
+              <a class="ui teal basic button" th:href="@{/admin/{id}/movie_edit(id=${movie.id})}">编&nbsp;辑</a>
+              <a class="movie_delete ui red basic button" onclick="del(this)">删&nbsp;除</a>
+              <input type="hidden" th:value="${movie.id}">
+            </td>
+            <div class="ui basic modal" th:attr="class='ui basic modal o'+${movie.id}">
+              <div class="ui icon header">
+                <i class="trash alternate icon" style="display: inline-block;margin-top: -20px;margin-right: 10px;"></i>
+                确定要删除该电影？
+              </div>
+
+              <div class="actions" style="text-align: center;">
+                <div class="ui red basic cancel inverted button">
+                  <i class="remove icon"></i>
+                  No
+                </div>
+                <a th:href="@{/admin/{id}/movie_delete(id=${movie.id})}" class="ui green ok inverted button">
+                  <i class="checkmark icon"></i>Yes</a>
+              </div>
+            </div>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="7">
+              <div class="ui pagination menu mini" th:if="${page.totalPages}>1">
+                <a class="item" onclick="page(this)" th:attr="data-page=${page.number}-1" th:unless="${page.first}">上一页</a>
+                <a class="item" onclick="page(this)" th:attr="data-page=${page.number}+1" th:unless="${page.last}">下一页</a>
+              </div>
+              <a href="#" th:href="@{/admin/movie_edit}" class="ui right floated teal basic button">新增</a>
+            </th>
+          </tr>
+        </tfoot>
+      </table>
+  </div>
+    </div>
+  </div>
+
+  <br>
+  <br>
+  <!--底部footer-->
+  <footer th:replace="admin/_fragments  ::  footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+      <div class="ui inverted divided stackable grid">
+        <div class="three wide column">
+          <div class="ui inverted link list">
+
+          </div>
+        </div>
+
+        </div>
+      </div>
+      <div class="ui inverted section divider"></div>
+      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2015 - 2019 / YifanCen / Powered by YifanCen in Amoy</p>
+    </div>
+
+  </footer>
+
+
+
+  <!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <!--/*/</th:block>/*/-->
+
+  <script>
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+      on : 'hover'
+    });
+    //消息提示关闭初始化
+    $('.message .close')
+            .on('click', function () {
+              $(this)
+                      .closest('.message')
+                      .transition('fade');
+            });
+    function page(obj) {
+      $("[name='page']").val($(obj).data("page"));
+      loadData();
+    }
+
+    $("#search-btn").click(function () {
+      $("[name='page']").val(0);
+      loadData();
+    });
+
+    function loadData() {
+      $("#table-container").load(/*[[@{/admin/movies/search}]]*/"/admin/movies/search",{
+        name : $("[name='name']").val(),
+        genre : $("[name='genre']").val(),
+        page : $("[name='page']").val()
+      });
+    }
+    $('#clear-btn')
+            .on('click', function() {
+              $('.ui.genre.dropdown')
+                      .dropdown('clear')
+              ;
+            });
+    function del(s) {
+      var id = s.nextElementSibling.value;
+      $('.ui.basic.modal.o'+id).modal('show');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+spring:
+  thymeleaf:
+    mode: HTML
+  profiles:
+    active: dev
+
+    # 静态资源路径
+  resources:
+    static-locations: classpath:static/,file:static/
+
+  http:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB

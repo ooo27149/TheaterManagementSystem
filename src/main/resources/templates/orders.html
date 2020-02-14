@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<!--<head >-->
+<head th:replace="_fragments :: head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的电影票</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css" >
+  <link rel="stylesheet" href="../static/css/me.css">
+</head>
+<body>
+
+  <!--导航-->
+  <!--<nav  class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >-->
+  <nav th:replace="_fragments :: menu(2)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item"></h2>
+        <a href="#" th:href="@{/tweets}" class=" item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="file alternate icon"></i>最新影讯</a>
+        <a href="#" th:href="@{/showing}" class=" item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>正在热映</a>
+        <a href="#" th:href="@{/client/orders}" class=" item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="file video outline icon"></i>我的电影</a>
+        <div class="right m-item item m-mobile-hide">
+          <div class="ui icon inverted transparent input m-margin-tb-tiny">
+            <input type="text" placeholder="Search....">
+            <i class="search link icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+
+  <!--中间内容-->
+  <div  class="m-container m-padded-tb-big" style="min-height: 50.5em !important;">
+    <div class="ui container">
+      <div class="ui stackable grid">
+
+        <div class="fourteen wide column">
+          <!--header-->
+          <div class="ui top attached segment no-border-besides-bottom m-bg1">
+            <div class="ui middle aligned two column grid">
+              <div class="column">
+                <h3 class="ui teal header">购票记录</h3>
+              </div>
+            </div>
+          </div>
+
+          <!--content-->
+          <div class="ui attached  segment no-border-besides-bottom m-container-moderate m-bg2">
+            <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+              <i class="close icon"></i>
+              <div class="header">提示：</div>
+              <p th:text="${message}">购票成功</p>
+            </div><div class="ui error message" th:unless="${#strings.isEmpty(messageError)}">
+              <i class="close icon"></i>
+              <div class="header">提示：</div>
+              <p th:text="${messageError}">退票失败</p>
+            </div>
+            <div th:if="${message1}">暂无购票记录</div>
+            <div class="ui padded vertical segment m-padded-tb-moderate m-margin-bottom-small " th:each="order : ${orders}">
+              <div class="ui middle aligned mobile reversed stackable grid m-bg1">
+                <div class="eleven wide column">
+                  <div class="">
+                    <h2 class="ui header m-inline-block m-text-thin" th:text="${order.schedule.movie.name}"> 14 </h2>
+                    <p class="m-text m-inline-block"  th:text="|&#12288;${#dates.format(order.schedule.beginTime,'yyyy-MM-dd HH:mm')} 开场|">2019-04-17 18:45:00</p>
+                  </div>
+                  <p class="m-text"  th:text="|${order.schedule.screen.name}&#12288;${order.seats}|">座位：[ 4排16座 , 4排17座 ]</p>
+                  <p class="m-text"  th:text="|价格：${order.totalPrice} 元|">价格：80元</p>
+                  <p class="m-text"  th:text="|购票时间：${#dates.format(order.createTime,'yyyy-MM-dd')}|">购票时间：2019-04-17</p>
+                  <p class="m-text"><span  th:text="${order.schedule.beginTime > #dates.createNow() ? '即将上映' : '已放映'}">即将上映</span>&#12288;
+                    <a class="order_delete"
+                       th:text="${order.schedule.beginTime > #dates.createNow() ? '退票' : '无法退票'}">退票</a>
+                  <input class="order_id" th:attr="class='order_id'+${order.id}"  type="hidden" th:value="${order.id}"></p>
+                </div>
+                <div class="five wide column">
+                    <img src="https://unsplash.it/800/450?image=1005" style="width: 120px!important;height: 180px!important;" th:src="@{${order.schedule.movie.poster}}" alt="" class="ui rounded image">
+                </div>
+              </div>
+              <div class="ui basic modal" th:attr="class='ui basic modal o'+${order.id}">
+                <div class="ui icon header">
+                  <i class="trash alternate icon" style="display: inline-block;margin-top: -20px;margin-right: 10px;"></i>
+                  确定要申请退票？
+                </div>
+
+                <div class="actions" style="text-align: center;">
+                  <div class="ui red basic cancel inverted button">
+                    <i class="remove icon"></i>
+                    No
+                  </div>
+                  <a th:href="@{/client/order_delete/{id}(id=${order.id})}" class="ui green ok inverted button">
+                    <i class="checkmark icon"></i>Yes</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!--footer-->
+
+
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+
+  <br>
+  <br>
+  <!--底部footer-->
+  <!--<footer class="ui inverted vertical segment m-padded-tb-massive">-->
+  <footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+
+      <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2015 - 2019 All Rights Reserved &nbsp;&nbsp;/&nbsp;&nbsp; Powered by YifanCen in Amoy</p>
+      <div class="ui inverted divided stackable grid">
+        <br>
+        <br>
+        <br>
+        <br>
+      </div>
+    </div>
+
+  </footer>
+
+
+  <!--/*/<th:block th:replace="_fragments :: script">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <!--/*/</th:block>/*/-->
+
+  <script>
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+      on : 'hover'
+    });
+    //消息提示关闭初始化
+    $('.message .close')
+            .on('click', function () {
+              $(this)
+                      .closest('.message')
+                      .transition('fade');
+            });
+    $('.order_delete').click(function () {
+      var id = $(this).next().val();
+      $('.ui.basic.modal.o'+id).modal('show');
+    });
+
+  </script>
+</body>
+</html>

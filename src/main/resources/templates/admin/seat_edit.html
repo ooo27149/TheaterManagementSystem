@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="admin/_fragments  ::  head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>座位管理</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../../static/css/me.css">
+  <link rel="stylesheet" href="../../static/css/seatchart.css">
+
+</head>
+<body>
+
+  <!--导航-->
+  <nav th:replace="admin/_fragments :: menu(2)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+      <div class="ui inverted secondary stackable menu">
+        <h2 class="ui teal header item">影院后台</h2>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="film icon"></i>影片管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>影厅管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tasks icon"></i>排片设置</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="book icon"></i>订单管理</a>
+        <a href="#" class=" item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="copy icon"></i>管理员设置</a>
+        <div class="right m-item m-mobile-hide menu">
+          <div class="ui dropdown  item">
+            <div class="text">
+              <img class="ui avatar image" src="https://unsplash.it/100/100?image=1005">
+              Avan
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+      <i class="sidebar icon"></i>
+    </a>
+  </nav>
+  <div class="ui attached pointing menu">
+    <div class="ui container">
+      <div class="left menu m-padded-lr-responsive">
+        <a href="#" th:href="@{/admin/screen_list}" class="item">列表</a>
+        <a href="#"  class="active teal item">编辑</a>
+      </div>
+    </div>
+  </div>
+
+
+      <div id="map-container" style="float: left!important;  margin-left: 6em!important;" class="m-container-big m-padded-tb-big " ></div>
+
+      <div style="float: left!important;" class="m-container-big m-padded-tb-big ">
+        <div class="s-containers">
+          <div id="legend-container" style="max-width: 18em !important; display: flex!important; float: left!important;"></div>
+          <div id="shoppingCart-container" style="max-width: 18em !important; display: flex!important; float: left!important;"></div>
+        </div>
+
+        <form th:object="${screen}" id='test_form' th:action="@{/admin/seat_edit/save} " method="post" onsubmit="return checkForm()">
+          <input type="hidden" name="screenId" th:value="${screen.id}" value=""/>
+          <input type="hidden" name="maintenances" id="maintenances" value=""/>
+          <input type="hidden" name="roads" id="roads" value=""/>
+          <!--<div class="ui left aligned container" >-->
+          <button type="button" class="ui button" onclick="window.history.go(-1)" >返回</button>
+          <button class="ui teal submit button" type="submit">保存</button>
+          <!--</div>-->
+        </form>
+      </div>
+
+  <!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+  <!--/*/</th:block>/*/-->
+
+  <script type="text/javascript" src="../../static/js/seatchart.js" th:src="@{/js/seatchart.js}"></script>
+
+  <script >
+
+    // Reserved and disabled seats are indexed
+    // from left to right by starting from 0.
+    // Given the seatmap as a 2D array and an index [R, C]
+    // the following values can obtained as follow:
+    // I = cols * R + C
+    var map = {
+      rows: [[${rows}]],
+      cols: [[${cols}]]
+      // e.g. Reserved Seat [Row: 1, Col: 2] = 9 * 1 + 2 = 11
+      // reserved: [1, 2, 5, 6, 7, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21],
+      // disabled: [0, 8],
+      // disabledRows: [4],
+      // disabledCols: [4]
+    };
+
+
+    var types = [
+      { type: "road", color: "#008080", price: 0, selected: [[${roads}]] },
+      { type: "maintenance", color: "#A0A0A0", price: 0, selected: [[${maintenances}]] }
+    ];
+
+    var sc = new SeatchartJS(map, types);
+    var currency = " ";
+
+    sc.setAssetsSrc("[[@{/assets}]]");
+    sc.setCurrency(currency);
+    sc.setSoundEnabled(false);
+    sc.setShoppingCartWidth(200);
+    sc.setShoppingCartHeight(250);
+    // sc.setMouseDownInterval(100);
+
+    sc.createMap("map-container");
+    sc.createLegend("legend-container");
+    sc.createShoppingCart("shoppingCart-container");
+
+    // sc.onRemovedSeat = function (seatName, type, price, seat) {
+    //   alert("Removed seat: name " + seatName + ", type " + type + ", price " + price + currency + ", index " + seat);
+    // };
+    // sc.onAddedSeat = function (seatName, type, price, seat) {
+    //   alert("Added seat: name " + seatName + ", type " + type + ", price " + price + currency + ", index " + seat);
+    // };
+
+    function checkForm(){
+
+      var o=sc.getShoppingCart();
+      var maintenances = document.getElementById('maintenances');
+      var roads= document.getElementById('roads');
+
+      maintenances.value = o["maintenance"];
+      roads.value = o["road"];
+
+      return true;
+    }
+
+
+  </script>
+</body>
+</html>
